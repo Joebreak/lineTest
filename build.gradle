@@ -1,0 +1,108 @@
+plugins{
+	id 'org.springframework.boot' version '1.5.9.RELEASE'
+}
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+archivesBaseName = 'sample'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+[compileJava, javadoc, compileTestJava]*.options*.encoding = 'UTF-8'
+
+applicationName="{archivesBaseName}"
+mainClassName='com.joe.Application'
+
+repositories{
+	mavenCentral()
+}
+
+sourceSets {
+	test {
+		java {
+			srcDirs = [ 'src/test/java' ]
+		}
+		resources {
+			srcDirs = [ 'src/test/java', 'src/main/resources' ]
+		}
+	}
+	integrationTest {
+		java {
+			srcDirs = [ 'src/test/integration/java' ]
+		}
+		resources {
+			srcDirs = [ 'src/test/integration/java', 'src/main/resources' ]
+		}
+		compileClasspath += sourceSets.test.compileClasspath
+		runtimeClasspath += sourceSets.test.runtimeClasspath
+	}
+}
+
+// copy resources into classpath for testing
+task copyTestResources {
+	doLast {
+		copy {
+			from sourceSets.test.resources
+			into sourceSets.test.output.classesDir
+		}
+		copy {
+			from sourceSets.integrationTest.resources
+			into sourceSets.integrationTest.output.classesDir
+		}
+	}
+}
+processTestResources.dependsOn copyTestResources
+
+configurations {
+	testCompile.extendsFrom compileOnly
+	compile.exclude module: 'spring-boot-starter-tomcat'
+	compile.exclude module: 'spring-boot-starter-logging'
+	compile.exclude module: 'websocket-server'
+	compile.exclude module: 'javax-websocket-server-impl'
+}
+
+dependencies {
+	compile (
+		// spring
+		'org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE',
+		'org.springframework.boot:spring-boot-starter-jetty:1.5.9.RELEASE',
+		//logger
+		'org.springframework.boot:spring-boot-starter-log4j2:1.5.9.RELEASE',
+		'com.lmax:disruptor:3.3.7',
+		// aop
+		'org.springframework.boot:spring-boot-starter-aop:1.5.9.RELEASE',
+		//sql
+		'mysql:mysql-connector-java:8.0.8-dmr',
+		//'org.springframework:spring-jdbc:4.3.13.RELEASE'
+		
+	)
+	compileOnly (
+		'javax.servlet:javax.servlet-api:3.1.0'
+	)
+	testCompile(
+		'junit:junit:4.12',
+		'org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE'
+	)
+}
+
+
+eclipse {
+	jdt {
+		if (file('.settings').exists()) {
+			File ef = file('.settings/org.eclipse.core.resources.prefs')
+			ef.write('eclipse.preferences.version=1\nencoding/<project>=UTF-8')
+			File lf = file('.settings/org.eclipse.core.runtime.prefs')
+			lf.write('eclipse.preferences.version=1\nline.separator=\\n')
+		}
+	}
+}
+
+task wrapper(type: Wrapper){
+	gradleVersion = '3.5.1'
+}
+
+tasks.withType(Tar){
+	compression = Compression.GZIP
+}
+
