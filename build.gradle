@@ -101,7 +101,9 @@ eclipse {
 task wrapper(type: Wrapper){
 	gradleVersion = '3.5.1'
 }
-
+applicationDistribution.from('public') {
+	into 'public'
+}
 tasks.withType(Tar){
 	compression = Compression.GZIP
 }
