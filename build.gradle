@@ -11,7 +11,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, javadoc, compileTestJava]*.options*.encoding = 'UTF-8'
 
-applicationName="{archivesBaseName}"
+applicationName="${archivesBaseName}"
 mainClassName='com.joe.Application'
 
 repositories{
