@@ -5,12 +5,11 @@ import java.util.logging.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.appengine.model.Webhook;
 import com.appengine.utils.JSONTool;
  
-@RestController
+//@RestController
 public class HelloWorld {
 	
 	private static final Logger log = Logger.getLogger(HelloWorld.class.getName());

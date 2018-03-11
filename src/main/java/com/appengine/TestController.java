@@ -38,7 +38,7 @@ public class TestController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		// create HTML response
 		PrintWriter writer = response.getWriter();
-		writer.append("HI/n");
+		
 
 		StringBuffer sb = new StringBuffer();
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "utf-8"))) {
@@ -54,8 +54,9 @@ public class TestController extends HttpServlet {
 		if (webhook == null) {
 			return;
 		}
-		log.info(JSONTool.writeJSON(webhook));
-		
+		String body = JSONTool.writeJSON(webhook);
+		log.info(body);
+		writer.append(body);
 	}
 
 }
