@@ -65,10 +65,11 @@ public class TestController extends HttpServlet {
 				String replyToken = event.getReplyToken();
 				String message = event.getMessage().getText();
 				ConnectionFactory connection = new ConnectionFactory();
+				connection.sendLineBotPush(MessagePushRequest.toRequest(message));
 				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
-				if (event.getSource() != null && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
-					connection.sendLineBotPush(MessagePushRequest.toRequest(message));
-				}
+				//if (event.getSource() != null && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
+					
+				//}
 			}
 		}
 		writer.append("HI~!");
