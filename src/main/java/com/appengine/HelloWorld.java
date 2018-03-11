@@ -14,14 +14,14 @@ public class HelloWorld {
 	private static final Logger log = Logger.getLogger(HelloWorld.class.getName());
 
     @RequestMapping(value="/hi", method = RequestMethod.POST)
-    public String hello(@RequestBody Webhook webhook) {
+    public void hello(@RequestBody Webhook webhook) {
     	log.info(JSONTool.writeJSON(webhook));
-        return "hello";
+        //return "hello";
     }
     
     @RequestMapping(value="/hello", method = RequestMethod.GET)
     public String hello1(@RequestBody Webhook webhook) {
-    	log.info(JSONTool.writeJSON(webhook));
-        return "hello";
+    	//log.info(JSONTool.writeJSON(webhook));
+        return "hello~~~~~~~~~~~~~~~~";
     }
 }
