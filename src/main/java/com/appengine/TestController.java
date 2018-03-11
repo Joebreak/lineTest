@@ -36,7 +36,7 @@ public class TestController extends HttpServlet {
 
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		writer.append("/api/LineChat/TLJS");
+		writer.append("/api/LineChat/TLJS11111");
 	}
 
 	@Override
@@ -60,19 +60,20 @@ public class TestController extends HttpServlet {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
-			log.info("webhook is null");
+			log.info("webhook is null/n/n/n/n");
 			return;
 		}
+		log.info("webhook~~~~~~/n/n/n/n");
 		for (Event event : webhook.getEvents()) {
 			if ("txt".equals(event.getType())
-					//&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
-					) {
+			// && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
+			) {
 				String replyToken = event.getReplyToken();
 				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
 			}
 		}
-		//String body = JSONTool.writeJSON(webhook);
+		// String body = JSONTool.writeJSON(webhook);
 		writer.append("HI~!");
 	}
 

@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
-import com.appengine.TestController;
 import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
 import com.appengine.utils.JSONTool;
@@ -27,7 +26,7 @@ import java.net.Proxy.Type;
 public class ConnectionFactory {
 
 	private boolean proxy;
-	private static final Logger log = Logger.getLogger(TestController.class.getName());
+	private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
 	public ConnectionFactory() {
 		super();
@@ -61,7 +60,9 @@ public class ConnectionFactory {
 				wr.flush();
 			}
 			int code = connection.getResponseCode();
-			log.info(code +": not ok");
+			if (code != 200) {
+				log.info(code +": not ok");
+			}
 			
 			String line;
 			StringBuilder sb = new StringBuilder();
