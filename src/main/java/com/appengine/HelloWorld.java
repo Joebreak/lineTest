@@ -19,7 +19,7 @@ public class HelloWorld {
         return "hello";
     }
     
-    @RequestMapping(value="/hi1", method = RequestMethod.GET)
+    @RequestMapping(value="/hello", method = RequestMethod.GET)
     public String hello1(@RequestBody Webhook webhook) {
     	log.info(JSONTool.writeJSON(webhook));
         return "hello";
