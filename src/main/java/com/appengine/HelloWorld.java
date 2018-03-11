@@ -13,7 +13,7 @@ public class HelloWorld {
 	
 	private static final Logger log = Logger.getLogger(TestController.class.getName());
 
-    @RequestMapping("/hello")
+    @RequestMapping(value="/hello", method = RequestMethod.POST)
     public String hello(@RequestBody Webhook webhook) {
     	log.info(JSONTool.writeJSON(webhook));
         return "hello";
