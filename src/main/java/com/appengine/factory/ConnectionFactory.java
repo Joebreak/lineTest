@@ -1,0 +1,145 @@
+package com.appengine.factory;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.springframework.stereotype.Service;
+
+import com.appengine.model.MessageReplyRequest;
+import com.appengine.utils.JSONTool;
+
+import java.net.Proxy.Type;
+
+@Service
+public class ConnectionFactory {
+
+	private boolean proxy;
+
+	public ConnectionFactory() {
+		super();
+		this.proxy = false;
+	}
+
+	public ConnectionFactory(boolean proxy) {
+		super();
+		this.proxy = proxy;
+	}
+
+	public String sendPostRequestAsEntity(String url, Map<String, String> headersMap, String jsonBody) {
+		URL pageUrl = null;
+		HttpURLConnection urlConnection = null;
+		
+
+		try {
+			pageUrl = new URL(url);
+			if (proxy) {
+				urlConnection = (HttpURLConnection) pageUrl.openConnection(new Proxy(Type.HTTP, new InetSocketAddress("localhost", 3128)));
+			} else {
+				urlConnection = (HttpURLConnection) pageUrl.openConnection();
+			}
+			addHeaders(urlConnection, headersMap);
+			urlConnection.setDoOutput(true);
+			urlConnection.setDoInput(true);
+			urlConnection.setRequestMethod("POST");
+			
+			try (OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream())) {
+				wr.write(jsonBody);
+				wr.flush();
+			}
+			String line;
+			StringBuilder sb = new StringBuilder();
+			try (BufferedReader rw = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+				while ((line = rw.readLine()) != null) {
+					sb.append(line);
+				}
+			}
+			return sb.toString();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "";
+	}
+
+	private void addHeaders(HttpURLConnection urlConnection, Map<String, String> headers) {
+		for (Entry<String, String> item : headers.entrySet()) {
+			urlConnection.setRequestProperty(item.getKey(), item.getValue());
+		}
+		// urlConnection.setRequestProperty("Content-Type", "application/json");
+		// urlConnection.setRequestProperty("charset", "utf-8");
+		// urlConnection.setRequestProperty("neweggbox-sso-token",
+		// "002012619c7681b433459e992cf4fe065c5f3f");
+	}
+	
+	private Map<String, String>  getLineBotHeaders() {
+		Map<String, String> headers = new HashMap<>();
+		headers.put("Content-Type", "application/json");
+		headers.put("Authorization", "Bearer rTeZbz5F1JtwqRNmc3CVdZIR/Sz58wjRksXogigbVI4xRmn8bklpxNZWxoPZvEiZgRGlt7PncUhh96qraOyjlYW7uyLyXIZqLFB+vAzftYCIRU/yBLG/JgWwIDNp/1PMbuPVtsc7UHoUrlC6BbPYfAdB04t89/1O/w1cDnyilFU=");
+		return headers;
+	}
+
+	public InputStream getInputStream(String url) {
+		URL pageUrl = null;
+		URLConnection urlConnection = null;
+
+		try {
+			pageUrl = new URL(url);
+			if (proxy) {
+				urlConnection = (HttpURLConnection) pageUrl.openConnection(new Proxy(Type.HTTP, new InetSocketAddress("localhost", 3128)));
+			} else {
+				urlConnection = (HttpURLConnection) pageUrl.openConnection();
+			}
+			return urlConnection.getInputStream();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	// HTTP GET request
+	public void sendGet() throws Exception {
+
+		String url = "http://festive-cistern-197604.appspot.com/api/LineChat/TLJS";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		//add request header
+		//con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(
+		        new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		//print result
+		System.out.println(response.toString());
+
+	}
+
+	public void sendLineBotReply(MessageReplyRequest rquest) {
+		String replyUrl = "https://api.line.me/v2/bot/message/reply";
+		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(rquest));
+	}
+}

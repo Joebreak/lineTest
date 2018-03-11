@@ -2,7 +2,7 @@ package com.appengine.model;
 
 import org.springframework.beans.factory.annotation.Value;
 
-public class Events {
+public class Event {
 
 	private String replyToken;
 	private String type;

@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.appengine.factory.ConnectionFactory;
+import com.appengine.model.Event;
+import com.appengine.model.MessageReplyRequest;
 import com.appengine.model.Webhook;
 import com.appengine.utils.JSONTool;
 
@@ -21,6 +26,9 @@ import java.util.logging.Logger;
 @WebServlet(name = "TestController", value = "/api/LineChat/TLJS")
 public class TestController extends HttpServlet {
 	private static final Logger log = Logger.getLogger(TestController.class.getName());
+
+	@Autowired
+	public ConnectionFactory connection;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -38,7 +46,6 @@ public class TestController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		// create HTML response
 		PrintWriter writer = response.getWriter();
-		
 
 		StringBuffer sb = new StringBuffer();
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "utf-8"))) {
@@ -54,9 +61,16 @@ public class TestController extends HttpServlet {
 		if (webhook == null) {
 			return;
 		}
-		String body = JSONTool.writeJSON(webhook);
-		log.info(body);
-		writer.append(body);
+		for (Event event : webhook.getEvents()) {
+			if ("txt".equals(event.getType())
+					//&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
+					) {
+				String replyToken = event.getReplyToken();
+				connection.sendLineBotReply(MessageReplyRequest.toRquest(replyToken, event.getMessage().getText()));
+			}
+		}
+		//String body = JSONTool.writeJSON(webhook);
+		writer.append("HI~!");
 	}
 
 }
