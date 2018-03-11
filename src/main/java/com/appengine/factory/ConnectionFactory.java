@@ -12,6 +12,9 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
+
+import org.springframework.stereotype.Service;
 
 import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
@@ -19,10 +22,11 @@ import com.appengine.utils.JSONTool;
 
 import java.net.Proxy.Type;
 
+@Service
 public class ConnectionFactory {
 
 	private boolean proxy;
-	//private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
+	private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
 	public ConnectionFactory() {
 		super();
@@ -69,7 +73,7 @@ public class ConnectionFactory {
 			}
 			return sb.toString();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.info(ex.getMessage());
 		}
 		return "";
 	}
