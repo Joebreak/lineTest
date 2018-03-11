@@ -60,12 +60,11 @@ public class TestController extends HttpServlet {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
-			log.info("webhook is null/n/n/n/n");
+			log.info("webhook is null");
 			return;
 		}
-		log.info("webhook~~~~~~/n/n/n/n");
 		for (Event event : webhook.getEvents()) {
-			if ("txt".equals(event.getType())
+			if ("text".equals(event.getType())
 			// && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
 			) {
 				String replyToken = event.getReplyToken();
