@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.appengine.factory.ConnectionFactory;
 import com.appengine.model.Event;
 import com.appengine.model.MessagePushRequest;
@@ -27,8 +25,7 @@ import java.util.logging.Logger;
 public class TestController extends HttpServlet {
 	private static final Logger log = Logger.getLogger(TestController.class.getName());
 
-	@Autowired
-	public ConnectionFactory connection;
+
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -66,9 +63,11 @@ public class TestController extends HttpServlet {
 			if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())
 			) {
 				String replyToken = event.getReplyToken();
-				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
-				if (!"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
-					connection.sendLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
+				String message = event.getMessage().getText();
+				ConnectionFactory connection = new ConnectionFactory();
+				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
+				if (event.getSource() != null && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
+					connection.sendLineBotPush(MessagePushRequest.toRequest(message));
 				}
 			}
 		}
