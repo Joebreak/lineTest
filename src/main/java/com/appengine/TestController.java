@@ -51,6 +51,7 @@ public class TestController extends HttpServlet {
 		} finally {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
+		log.info("test1");
 		log.info(JSONTool.writeJSON(webhook));
 	}
 
