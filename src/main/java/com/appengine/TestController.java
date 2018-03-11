@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.appengine.factory.ConnectionFactory;
 import com.appengine.model.Event;
 import com.appengine.model.MessagePushRequest;
@@ -20,16 +18,12 @@ import com.appengine.model.MessageReplyRequest;
 import com.appengine.model.Webhook;
 import com.appengine.utils.JSONTool;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 @WebServlet(name = "TestController", value = "/api/LineChat/TLJS")
 public class TestController extends HttpServlet {
 	private static final Logger log = Logger.getLogger(TestController.class.getName());
-
-	@Autowired
-	public ConnectionFactory connection;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -45,7 +39,6 @@ public class TestController extends HttpServlet {
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		// create HTML response
 		PrintWriter writer = response.getWriter();
 
 		StringBuffer sb = new StringBuffer();
@@ -65,16 +58,17 @@ public class TestController extends HttpServlet {
 			return;
 		}
 		for (Event event : webhook.getEvents()) {
-			if ("text".equals(event.getType())
+			if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())
 			// && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
 			) {
+				ConnectionFactory connection = new ConnectionFactory();
 				String replyToken = event.getReplyToken();
 				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
 				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 			}
 		}
 		// String body = JSONTool.writeJSON(webhook);
-		writer.append("HI~11!");
+		writer.append("HI~22!");
 	}
 
 }

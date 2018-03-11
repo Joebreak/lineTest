@@ -14,15 +14,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.springframework.stereotype.Service;
-
 import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
 import com.appengine.utils.JSONTool;
 
 import java.net.Proxy.Type;
 
-@Service
 public class ConnectionFactory {
 
 	private boolean proxy;
