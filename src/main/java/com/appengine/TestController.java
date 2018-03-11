@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.appengine.model.Webhook;
+import com.appengine.utils.JSONTool;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,9 +50,8 @@ public class TestController extends HttpServlet {
 			log.log(Level.WARNING, "error", e);
 		} finally {
 		}
-
-		log.info(sb.toString());
-		// log.info(JSONTool.writeJSON(writer));
+		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
+		log.info(JSONTool.writeJSON(webhook));
 	}
 
 }
