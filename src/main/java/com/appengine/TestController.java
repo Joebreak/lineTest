@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.appengine.factory.ConnectionFactory;
 import com.appengine.model.Event;
+import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
 import com.appengine.model.Webhook;
 import com.appengine.utils.JSONTool;
@@ -59,6 +60,7 @@ public class TestController extends HttpServlet {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
+			log.info("webhook is null");
 			return;
 		}
 		for (Event event : webhook.getEvents()) {
@@ -66,7 +68,8 @@ public class TestController extends HttpServlet {
 					//&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
 					) {
 				String replyToken = event.getReplyToken();
-				connection.sendLineBotReply(MessageReplyRequest.toRquest(replyToken, event.getMessage().getText()));
+				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
+				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
 			}
 		}
 		//String body = JSONTool.writeJSON(webhook);

@@ -12,9 +12,12 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
+import com.appengine.TestController;
+import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
 import com.appengine.utils.JSONTool;
 
@@ -24,6 +27,7 @@ import java.net.Proxy.Type;
 public class ConnectionFactory {
 
 	private boolean proxy;
+	private static final Logger log = Logger.getLogger(TestController.class.getName());
 
 	public ConnectionFactory() {
 		super();
@@ -37,28 +41,31 @@ public class ConnectionFactory {
 
 	public String sendPostRequestAsEntity(String url, Map<String, String> headersMap, String jsonBody) {
 		URL pageUrl = null;
-		HttpURLConnection urlConnection = null;
+		HttpURLConnection connection = null;
 		
-
+		this.proxy= false;
 		try {
 			pageUrl = new URL(url);
 			if (proxy) {
-				urlConnection = (HttpURLConnection) pageUrl.openConnection(new Proxy(Type.HTTP, new InetSocketAddress("localhost", 3128)));
+				connection = (HttpURLConnection) pageUrl.openConnection(new Proxy(Type.HTTP, new InetSocketAddress("localhost", 3128)));
 			} else {
-				urlConnection = (HttpURLConnection) pageUrl.openConnection();
+				connection = (HttpURLConnection) pageUrl.openConnection();
 			}
-			addHeaders(urlConnection, headersMap);
-			urlConnection.setDoOutput(true);
-			urlConnection.setDoInput(true);
-			urlConnection.setRequestMethod("POST");
+			addHeaders(connection, headersMap);
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			connection.setRequestMethod("POST");
 			
-			try (OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream())) {
+			try (OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream())) {
 				wr.write(jsonBody);
 				wr.flush();
 			}
+			int code = connection.getResponseCode();
+			log.info(code +": not ok");
+			
 			String line;
 			StringBuilder sb = new StringBuilder();
-			try (BufferedReader rw = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+			try (BufferedReader rw = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
 				while ((line = rw.readLine()) != null) {
 					sb.append(line);
 				}
@@ -138,8 +145,13 @@ public class ConnectionFactory {
 
 	}
 
-	public void sendLineBotReply(MessageReplyRequest rquest) {
+	public void sendLineBotReply(MessageReplyRequest request) {
 		String replyUrl = "https://api.line.me/v2/bot/message/reply";
-		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(rquest));
+		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(request));
+	}
+
+	public void setdLineBotPush(MessagePushRequest request) {
+		String replyUrl = "https://api.line.me/v2/bot/message/push";
+		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(request));
 	}
 }

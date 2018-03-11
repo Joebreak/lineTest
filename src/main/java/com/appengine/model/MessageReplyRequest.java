@@ -13,7 +13,7 @@ public class MessageReplyRequest {
 	@Value("messages")
 	private List<Message> Messages;
 
-	public static MessageReplyRequest toRquest(String replyToken, String stringMessage) {
+	public static MessageReplyRequest toRequest(String replyToken, String stringMessage) {
 		Message message = new Message();
 		message.setType("text");
 		message.setText(stringMessage);
