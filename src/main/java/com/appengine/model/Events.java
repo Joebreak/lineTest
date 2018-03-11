@@ -2,12 +2,13 @@ package com.appengine.model;
 
 import org.springframework.beans.factory.annotation.Value;
 
-public class events {
+public class Events {
 
 	private String replyToken;
 	private String type;
 	private Long timestamp;
-	private source source;
+	@Value("source")
+	private Source source;
 	@Value("message")
 	private Message message;
 
@@ -35,11 +36,11 @@ public class events {
 		this.timestamp = timestamp;
 	}
 
-	public source getSource() {
+	public Source getSource() {
 		return source;
 	}
 
-	public void setSource(source source) {
+	public void setSource(Source source) {
 		this.source = source;
 	}
 

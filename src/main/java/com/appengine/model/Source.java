@@ -1,6 +1,6 @@
 package com.appengine.model;
 
-public class source {
+public class Source {
 
 	private String type;
 	private String userId;
@@ -9,12 +9,12 @@ public class source {
 		return type;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getUserId() {
+		return userId;
 	}
 
 	public void setUserId(String userId) {

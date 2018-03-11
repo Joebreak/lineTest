@@ -1,17 +1,17 @@
 package com.appengine.model;
 
+import org.springframework.beans.factory.annotation.Value;
 
 public class Webhook {
 
-	
-	private events[] events;
+	@Value("events")
+	private Events[] events;
 
-	public events[] getEvents() {
+	public Events[] getEvents() {
 		return events;
 	}
 
-	public void setEvents(events[] events) {
+	public void setEvents(Events[] events) {
 		this.events = events;
 	}
-	
 }
