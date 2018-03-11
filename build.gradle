@@ -1,77 +1,110 @@
+plugins{
+	id 'org.springframework.boot' version '1.5.9.RELEASE'
+}
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
 
+archivesBaseName = 'sample'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+[compileJava, javadoc, compileTestJava]*.options*.encoding = 'UTF-8'
 
-buildscript {    // Configuration for building
-  repositories {
-    jcenter()    // Bintray's repository - a fast Maven Central mirror & more
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'com.google.cloud.tools:appengine-gradle-plugin:+'    // latest App Engine Gradle tasks
-  }
+applicationName="${archivesBaseName}"
+mainClassName='com.joe.Application'
+
+repositories{
+	mavenCentral()
 }
 
-repositories {   // repositories for Jar's you access in your code
-  maven {
-    url 'https://oss.sonatype.org/content/repositories/snapshots' // SNAPSHOT repository (if needed)
-  }
-  mavenCentral()
-  jcenter()
+sourceSets {
+	test {
+		java {
+			srcDirs = [ 'src/test/java' ]
+		}
+		resources {
+			srcDirs = [ 'src/test/java', 'src/main/resources' ]
+		}
+	}
+	integrationTest {
+		java {
+			srcDirs = [ 'src/test/integration/java' ]
+		}
+		resources {
+			srcDirs = [ 'src/test/integration/java', 'src/main/resources' ]
+		}
+		compileClasspath += sourceSets.test.compileClasspath
+		runtimeClasspath += sourceSets.test.runtimeClasspath
+	}
 }
 
-apply plugin: 'java'                              // standard Java tasks
-apply plugin: 'war'                               // standard Web Archive plugin
-apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+// copy resources into classpath for testing
+task copyTestResources {
+	doLast {
+		copy {
+			from sourceSets.test.resources
+			into sourceSets.test.output.classesDir
+		}
+		copy {
+			from sourceSets.integrationTest.resources
+			into sourceSets.integrationTest.output.classesDir
+		}
+	}
+}
+processTestResources.dependsOn copyTestResources
 
-
-version = "1.5.9.RELEASE"       // Version in generated output
-
-sourceCompatibility = 1.8     // App Engine Flexible uses Java 8
-targetCompatibility = 1.8     // App Engine Flexible uses Java 8
-
+configurations {
+	testCompile.extendsFrom compileOnly
+	compile.exclude module: 'spring-boot-starter-tomcat'
+	compile.exclude module: 'spring-boot-starter-logging'
+	compile.exclude module: 'websocket-server'
+	compile.exclude module: 'javax-websocket-server-impl'
+}
 
 dependencies {
-  compile (
-  'com.google.appengine:appengine-api-1.0-sdk:+', // Latest App Engine Api's
-  'jstl:jstl:1.2',
-  'org.springframework:spring-core:4.3.14.RELEASE',
-  'org.springframework:spring-web:4.3.14.RELEASE',
-  'org.springframework:spring-webmvc:4.3.14.RELEASE'
-  ) 
-  providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
-
-
-// Add your dependencies here.
-//  compile 'com.google.cloud:google-cloud:+'   // Latest Cloud API's http://googlecloudplatform.github.io/google-cloud-java
-
-  testCompile( 
-   'junit:junit:4.12',
-   'com.google.truth:truth:0.33',
-   'org.mockito:mockito-all:1.10.19',
-
-   'com.google.appengine:appengine-testing:+',
-   'com.google.appengine:appengine-api-stubs:+',
-   'com.google.appengine:appengine-tools-sdk:+'
-  )
+	compile (
+		// spring
+		'org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE',
+		'org.springframework.boot:spring-boot-starter-jetty:1.5.9.RELEASE',
+		//logger
+		'org.springframework.boot:spring-boot-starter-log4j2:1.5.9.RELEASE',
+		'com.lmax:disruptor:3.3.7',
+		// aop
+		'org.springframework.boot:spring-boot-starter-aop:1.5.9.RELEASE',
+		//sql
+		'mysql:mysql-connector-java:8.0.8-dmr',
+		//'org.springframework:spring-jdbc:4.3.13.RELEASE'
+		
+	)
+	compileOnly (
+		'javax.servlet:javax.servlet-api:3.1.0'
+	)
+	testCompile(
+		'junit:junit:4.12',
+		'org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE'
+	)
 }
 
-// Always run unit tests
-appengineDeploy.dependsOn test
-appengineStage.dependsOn test
 
+eclipse {
+	jdt {
+		if (file('.settings').exists()) {
+			File ef = file('.settings/org.eclipse.core.resources.prefs')
+			ef.write('eclipse.preferences.version=1\nencoding/<project>=UTF-8')
+			File lf = file('.settings/org.eclipse.core.runtime.prefs')
+			lf.write('eclipse.preferences.version=1\nline.separator=\\n')
+		}
+	}
+}
 
-
-test {
-  useJUnit()
-  testLogging.showStandardStreams = true
-  beforeTest { descriptor ->
-     logger.lifecycle("test: " + descriptor + "  Running")
-  }
-
-  onOutput { descriptor, event ->
-     logger.lifecycle("test: " + descriptor + ": " + event.message )
-  }
-  afterTest { descriptor, result ->
-    logger.lifecycle("test: " + descriptor + ": " + result )
-  }
+task wrapper(type: Wrapper){
+	gradleVersion = '3.5.1'
+}
+applicationDistribution.from('public') {
+	into 'public'
+}
+tasks.withType(Tar){
+	compression = Compression.GZIP
 }
 
