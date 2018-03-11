@@ -35,7 +35,8 @@ dependencies {
   'jstl:jstl:1.2',
   'org.springframework:spring-core:4.3.14.RELEASE',
   'org.springframework:spring-web:4.3.14.RELEASE',
-  'org.springframework:spring-webmvc:4.3.14.RELEASE'
+  'org.springframework:spring-webmvc:4.3.14.RELEASE',
+  'org.codehaus.jackson:jackson-mapper-asl:1.9.0'
   ) 
   providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
