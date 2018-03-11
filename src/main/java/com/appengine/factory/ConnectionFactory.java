@@ -12,7 +12,6 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
@@ -23,7 +22,7 @@ import java.net.Proxy.Type;
 public class ConnectionFactory {
 
 	private boolean proxy;
-	private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
+	//private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
 	public ConnectionFactory() {
 		super();
@@ -57,8 +56,8 @@ public class ConnectionFactory {
 				wr.flush();
 			}
 			int code = connection.getResponseCode();
-			if (code != 200) {
-				log.info(code +": not ok");
+			if (code == 200) {
+				return "";
 			}
 			
 			String line;

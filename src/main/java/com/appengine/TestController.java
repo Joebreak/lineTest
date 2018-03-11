@@ -63,12 +63,12 @@ public class TestController extends HttpServlet {
 			) {
 				ConnectionFactory connection = new ConnectionFactory();
 				String replyToken = event.getReplyToken();
+				//connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
-				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 			}
 		}
 		// String body = JSONTool.writeJSON(webhook);
-		writer.append("HI~22!");
+		writer.append("HI~33!");
 	}
 
 }
