@@ -141,13 +141,13 @@ public class ConnectionFactory {
 		System.out.println(response.toString());
 
 	}
-
+	
 	public void sendLineBotReply(MessageReplyRequest request) {
 		String replyUrl = "https://api.line.me/v2/bot/message/reply";
 		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(request));
 	}
 
-	public void setdLineBotPush(MessagePushRequest request) {
+	public void sendLineBotPush(MessagePushRequest request) {
 		String replyUrl = "https://api.line.me/v2/bot/message/push";
 		sendPostRequestAsEntity(replyUrl,getLineBotHeaders(), JSONTool.writeJSON(request));
 	}

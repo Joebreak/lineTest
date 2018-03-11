@@ -63,8 +63,10 @@ public class TestController extends HttpServlet {
 			) {
 				ConnectionFactory connection = new ConnectionFactory();
 				String replyToken = event.getReplyToken();
-				//connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
-				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
+				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
+				if ("U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
+					//connection.sendLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
+				}
 			}
 		}
 		// String body = JSONTool.writeJSON(webhook);
