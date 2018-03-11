@@ -27,7 +27,7 @@ public class TestController extends HttpServlet {
 
 		response.setContentType("application/json");
 		PrintWriter writer = response.getWriter();
-		writer.append("HI~");
+		writer.append("/api/LineChat/TLJS");
 	}
 
 	@Override
