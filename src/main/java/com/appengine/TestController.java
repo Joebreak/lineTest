@@ -55,12 +55,13 @@ public class TestController extends HttpServlet {
 				sb.append(temp);
 			}
 		} catch (Exception e) {
-			log.log(Level.WARNING, "error", e);
+			log.info("error : "+ sb.toString());
 		} finally {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
 			log.info("webhook is null");
+			log.info(sb.toString());
 			return;
 		}
 		for (Event event : webhook.getEvents()) {
@@ -68,12 +69,12 @@ public class TestController extends HttpServlet {
 			// && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())
 			) {
 				String replyToken = event.getReplyToken();
-				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 				connection.setdLineBotPush(MessagePushRequest.toRequest(event.getMessage().getText()));
+				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, event.getMessage().getText()));
 			}
 		}
 		// String body = JSONTool.writeJSON(webhook);
-		writer.append("HI~!");
+		writer.append("HI~11!");
 	}
 
 }
