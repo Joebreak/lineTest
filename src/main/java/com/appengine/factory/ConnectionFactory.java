@@ -12,7 +12,9 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.appengine.model.MessagePushRequest;
 import com.appengine.model.MessageReplyRequest;
@@ -22,8 +24,8 @@ import java.net.Proxy.Type;
 
 public class ConnectionFactory {
 
+	private static final Logger logger = LogManager.getLogger(ConnectionFactory.class);
 	private boolean proxy;
-	private static final Logger log = Logger.getLogger(ConnectionFactory.class.getName());
 
 	public ConnectionFactory() {
 		super();
@@ -70,7 +72,7 @@ public class ConnectionFactory {
 			}
 			return sb.toString();
 		} catch (Exception ex) {
-			log.info(ex.getMessage());
+			logger.error("connect error : {}",ex.getMessage());
 		}
 		return "";
 	}

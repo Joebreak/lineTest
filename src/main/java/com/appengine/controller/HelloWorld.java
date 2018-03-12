@@ -1,6 +1,8 @@
-package com.appengine;
+package com.appengine.controller;
 
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,15 +18,16 @@ import com.appengine.model.Event;
 @RestController
 public class HelloWorld {
 
-	private static final Logger log = Logger.getLogger(HelloWorld.class.getName());
+	private static final Logger logger = LogManager.getLogger(HelloWorld.class);
+
 
 	@RequestMapping(value = "/api/LineChat/TLJS1", method = RequestMethod.POST)
 	public void hello(@RequestBody Webhook webhook) {
 		String sb = JSONTool.writeJSON(webhook);
-		log.info(sb);
+		logger.info(sb);
 		if (webhook == null) {
-			log.info("webhook is null");
-			log.info(sb);
+			logger.info("webhook is null");
+			logger.info(sb);
 			return;
 		}
 		for (Event event : webhook.getEvents()) {

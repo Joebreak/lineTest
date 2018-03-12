@@ -1,4 +1,4 @@
-package com.appengine;
+package com.appengine.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.appengine.factory.ConnectionFactory;
 import com.appengine.model.Event;
 import com.appengine.model.MessagePushRequest;
@@ -18,12 +21,11 @@ import com.appengine.model.MessageReplyRequest;
 import com.appengine.model.Webhook;
 import com.appengine.utils.JSONTool;
 
-import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
-@WebServlet(name = "TestController", value = "/api/LineChat/TLJS")
+@WebServlet(value = "/api/LineChat/TLJS")
 public class TestController extends HttpServlet {
-	private static final Logger log = Logger.getLogger(TestController.class.getName());
+	private static final Logger logger = LogManager.getLogger(TestController.class);
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -48,13 +50,13 @@ public class TestController extends HttpServlet {
 				sb.append(temp);
 			}
 		} catch (Exception e) {
-			log.info("error : " + sb.toString());
+			logger.info("error : " + sb.toString());
 		} finally {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
-			log.info("webhook is null");
-			log.info(sb.toString());
+			logger.info("webhook is null");
+			logger.info(sb.toString());
 			return;
 		}
 		for (Event event : webhook.getEvents()) {
