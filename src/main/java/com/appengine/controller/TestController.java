@@ -1,8 +1,6 @@
 package com.appengine.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -13,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.commons.io.IOUtils;
 
 import com.appengine.factory.ConnectionFactory;
 import com.appengine.model.Event;
@@ -42,22 +41,13 @@ public class TestController extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
-
-		StringBuffer sb = new StringBuffer();
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(), "utf-8"))) {
-			String temp;
-			while ((temp = br.readLine()) != null) {
-				sb.append(temp);
-			}
-		} catch (Exception e) {
-			logger.error("error : {}" + e);
-		} finally {
-		}
-		writer.append(sb.toString());
-		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
+		String requestString = IOUtils.toString(request.getInputStream());
+		writer.append(requestString);
+		logger.info(requestString);
+		Webhook webhook = JSONTool.readJSON(requestString, Webhook.class);
 		if (webhook == null) {
 			logger.info("webhook is null");
-			logger.info(sb.toString());
+			logger.info(requestString.toString());
 			return;
 		}
 		for (Event event : webhook.getEvents()) {

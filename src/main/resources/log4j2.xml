@@ -4,6 +4,11 @@
 		<Property name="projName">metadata</Property>
 	</Properties>
 	<Appenders>
+		<RollingRandomAccessFile name="RollingRandomAccessFile">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+		</RollingRandomAccessFile>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
