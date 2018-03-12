@@ -38,7 +38,7 @@ public class TestController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();
@@ -50,9 +50,10 @@ public class TestController extends HttpServlet {
 				sb.append(temp);
 			}
 		} catch (Exception e) {
-			logger.info("error : " + sb.toString());
+			logger.error("error : {}" + e);
 		} finally {
 		}
+		writer.append(sb.toString());
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
 		if (webhook == null) {
 			logger.info("webhook is null");
@@ -78,7 +79,6 @@ public class TestController extends HttpServlet {
 				thread.start();
 			}
 		}
-		writer.append("HI~!");
 	}
 
 }
