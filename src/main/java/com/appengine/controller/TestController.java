@@ -46,8 +46,7 @@ public class TestController extends HttpServlet {
 		logger.info(requestString);
 		Webhook webhook = JSONTool.readJSON(requestString, Webhook.class);
 		if (webhook == null) {
-			logger.info("webhook is null");
-			logger.info(requestString.toString());
+			logger.info("webhook is null : {}", requestString);
 			return;
 		}
 		for (Event event : webhook.getEvents()) {

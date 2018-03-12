@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MessageReplyRequest {
 
-	@Value("replyToken")
+	@JsonProperty("replyToken")
 	private String replyToken;
-	@Value("messages")
+	@JsonProperty("messages")
 	private List<Message> Messages;
 
 	public static MessageReplyRequest toRequest(String replyToken, String stringMessage) {
