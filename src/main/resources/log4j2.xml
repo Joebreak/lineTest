@@ -45,18 +45,6 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.neweggtech.server.commons.web.filter" level="trace"
-			additivity="false">
-			<AppenderRef ref="RollingRandomAccessFile_request_dump" />
-		</Logger>
-		<Logger name="org.springframework.jdbc" level="info"
-			additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-		<Logger name="org.springframework.jdbc.core.BeanPropertyRowMapper"
-			level="info" additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
 		<logger
 			name="org.springframework.aop.interceptor.PerformanceMonitorInterceptor"
 			level="trace" additivity="false">
