@@ -3,12 +3,12 @@ package com.appengine.model;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Value;
 
 public class MessagePushRequest {
 
 	private String to;
-	@JsonProperty("messages")
+	@Value("messages")
 	private List<Message> messages;
 
 
