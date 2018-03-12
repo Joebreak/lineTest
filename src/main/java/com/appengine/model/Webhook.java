@@ -2,11 +2,13 @@ package com.appengine.model;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Webhook {
 
-	@Value("events")
+	@JsonProperty("events")
 	private List<Event> events;
 
 	public List<Event> getEvents() {
