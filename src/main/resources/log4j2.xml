@@ -4,42 +4,6 @@
 		<Property name="projName">metadata</Property>
 	</Properties>
 	<Appenders>
-		<RollingRandomAccessFile name="RollingRandomAccessFile"
-			immediateFlush="false" fileName="logs/${projName}.log"
-			filePattern="logs/${projName}-%d{yyyy-MM-dd}-%i.log.gz">
-			<PatternLayout>
-				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
-			</Policies>
-			<DefaultRolloverStrategy max="40">
-				<Delete basePath="logs" maxDepth="1">
-					<IfFileName regex="${projName}-[-\d]+.log.gz">
-						<IfLastModified age="90d" />
-					</IfFileName>
-				</Delete>
-			</DefaultRolloverStrategy>
-		</RollingRandomAccessFile>
-		<RollingRandomAccessFile name="RollingRandomAccessFile_request_dump"
-			immediateFlush="false" fileName="logs/${projName}-request-dump.log"
-			filePattern="logs/${projName}-request-dump-%d{yyyy-MM-dd}-%i.log.gz">
-			<PatternLayout>
-				<Pattern>%d - %m%n</Pattern>
-			</PatternLayout>
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-				<SizeBasedTriggeringPolicy size="250 MB" />
-			</Policies>
-			<DefaultRolloverStrategy max="40">
-				<Delete basePath="logs" maxDepth="1">
-					<IfFileName regex="${projName}-request-dump-[-\d]+.log.gz">
-						<IfLastModified age="90d" />
-					</IfFileName>
-				</Delete>
-			</DefaultRolloverStrategy>
-		</RollingRandomAccessFile>
 		<Console name="Console" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
