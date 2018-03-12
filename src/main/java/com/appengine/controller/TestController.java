@@ -44,30 +44,30 @@ public class TestController extends HttpServlet {
 		String requestString = IOUtils.toString(request.getInputStream());
 		writer.append(requestString);
 		logger.info(requestString);
-		Webhook webhook = JSONTool.readJSON(requestString, Webhook.class);
-		if (webhook == null) {
-			logger.info("webhook is null : {}", requestString);
-			return;
-		}
-		for (Event event : webhook.getEvents()) {
-			if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())) {
-				String replyToken = event.getReplyToken();
-				String message = event.getMessage().getText();
+		//Webhook webhook = JSONTool.readJSON(requestString, Webhook.class);
+		//if (webhook == null) {
+			//logger.info("webhook is null : {}", requestString);
+			//return;
+		//}
+		//for (Event event : webhook.getEvents()) {
+			//if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())) {
+				//String replyToken = event.getReplyToken();
+				//String message = event.getMessage().getText();
 				Thread thread = new Thread(new Runnable() {
 					@Override
 					public void run() {
 						ConnectionFactory connection = new ConnectionFactory();
-						connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
-						if (event.getSource() != null
-								&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
-							connection.sendLineBotPush(MessagePushRequest.toRequest(message));
+						//connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
+						//if (event.getSource() != null
+								//&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
+							connection.sendLineBotPush(MessagePushRequest.toRequest("OK"));
 						}
-					}
+					//}
 				});
 				thread.setDaemon(true);
 				thread.start();
-			}
+			//}
 		}
-	}
+	//}
 
 }
