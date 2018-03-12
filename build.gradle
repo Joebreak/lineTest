@@ -45,7 +45,7 @@ targetCompatibility = 1.8     // App Engine Flexible uses Java 8
 dependencies {
   compile (
   		'com.google.appengine:appengine-api-1.0-sdk:+', // Latest App Engine Api's
-  		'jstl:jstl:1.2',
+  		//'jstl:jstl:1.2',
   		// spring
 		'org.springframework:spring-webmvc:4.3.12.RELEASE',
   		// logger
@@ -53,7 +53,7 @@ dependencies {
 		//'org.apache.logging.log4j:log4j-jcl:2.8.2',
 		//'org.apache.logging.log4j:log4j-slf4j-impl:2.8.2',
 		//'org.slf4j:slf4j-jdk14:1.7.25',
-		'com.lmax:disruptor:3.3.7',
+		//'com.lmax:disruptor:3.3.7',
   		// json
   		'com.fasterxml.jackson.core:jackson-databind:2.9.2',
   		'org.codehaus.jackson:jackson-mapper-asl:1.9.0',
@@ -67,15 +67,15 @@ dependencies {
 // Add your dependencies here.
 //  compile 'com.google.cloud:google-cloud:+'   // Latest Cloud API's http://googlecloudplatform.github.io/google-cloud-java
 
-  testCompile( 
-   'junit:junit:4.12',
-   'com.google.truth:truth:0.33',
-   'org.mockito:mockito-all:1.10.19',
+  //testCompile( 
+  // 'junit:junit:4.12',
+   //'com.google.truth:truth:0.33',
+   //'org.mockito:mockito-all:1.10.19',
 
-   'com.google.appengine:appengine-testing:+',
-   'com.google.appengine:appengine-api-stubs:+',
-   'com.google.appengine:appengine-tools-sdk:+'
-  )
+   //'com.google.appengine:appengine-testing:+',
+  // 'com.google.appengine:appengine-api-stubs:+',
+  // 'com.google.appengine:appengine-tools-sdk:+'
+  //)
 }
 
 // Always run unit tests
@@ -84,18 +84,18 @@ appengineStage.dependsOn test
 
 
 
-test {
-  useJUnit()
-  testLogging.showStandardStreams = true
-  beforeTest { descriptor ->
-     logger.lifecycle("test: " + descriptor + "  Running")
-  }
+//test {
+ // useJUnit()
+  //testLogging.showStandardStreams = true
+  //beforeTest { descriptor ->
+   //  logger.lifecycle("test: " + descriptor + "  Running")
+ // }
 
-  onOutput { descriptor, event ->
-     logger.lifecycle("test: " + descriptor + ": " + event.message )
-  }
-  afterTest { descriptor, result ->
-    logger.lifecycle("test: " + descriptor + ": " + result )
-  }
-}
+  //onOutput { descriptor, event ->
+    // logger.lifecycle("test: " + descriptor + ": " + event.message )
+  //}
+  //afterTest { descriptor, result ->
+    //logger.lifecycle("test: " + descriptor + ": " + result )
+  //}
+//}
 
