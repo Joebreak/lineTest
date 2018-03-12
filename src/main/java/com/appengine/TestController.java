@@ -25,8 +25,6 @@ import java.util.logging.Logger;
 public class TestController extends HttpServlet {
 	private static final Logger log = Logger.getLogger(TestController.class.getName());
 
-
-	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -50,7 +48,7 @@ public class TestController extends HttpServlet {
 				sb.append(temp);
 			}
 		} catch (Exception e) {
-			log.info("error : "+ sb.toString());
+			log.info("error : " + sb.toString());
 		} finally {
 		}
 		Webhook webhook = JSONTool.readJSON(sb.toString(), Webhook.class);
@@ -60,16 +58,22 @@ public class TestController extends HttpServlet {
 			return;
 		}
 		for (Event event : webhook.getEvents()) {
-			if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())
-			) {
+			if ("message".equals(event.getType()) && "text".equals(event.getMessage().getType())) {
 				String replyToken = event.getReplyToken();
 				String message = event.getMessage().getText();
-				ConnectionFactory connection = new ConnectionFactory();
-				connection.sendLineBotPush(MessagePushRequest.toRequest(message));
-				connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
-				//if (event.getSource() != null && !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
-					
-				//}
+				Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						ConnectionFactory connection = new ConnectionFactory();
+						connection.sendLineBotReply(MessageReplyRequest.toRequest(replyToken, message));
+						if (event.getSource() != null
+								&& !"U47ad2aed1c9118b0ea35cce8713120c2".equals(event.getSource().getUserId())) {
+							connection.sendLineBotPush(MessagePushRequest.toRequest(message));
+						}
+					}
+				});
+				thread.setDaemon(true);
+				thread.start();
 			}
 		}
 		writer.append("HI~!");

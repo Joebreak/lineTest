@@ -1,15 +1,17 @@
 package com.appengine.model;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
 
 	private String replyToken;
 	private String type;
 	private Long timestamp;
-	@Value("source")
+	@JsonProperty("source")
 	private Source source;
-	@Value("message")
+	@JsonProperty("message")
 	private Message message;
 
 	public String getReplyToken() {

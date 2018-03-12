@@ -1,5 +1,8 @@
 package com.appengine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 
 	private String id;
