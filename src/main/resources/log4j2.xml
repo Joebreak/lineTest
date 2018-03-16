@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+        <Appenders>
+                <RollingRandomAccessFile name="RollingRandomAccessFile"
+                        fileName="logs/log4j.log" filePattern="log/%d{yyyy-MM-dd}-%i.log.gz">
+                        <PatternLayout>
+                                <!--
+                                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+                                -->
+                                <Pattern>%d{yyyy/MM/dd HH:mm:ss} %5p %c{1}\:%L - %m%n</Pattern>
+                        </PatternLayout>
+                        <Policies>
+                                <TimeBasedTriggeringPolicy />
+                                <SizeBasedTriggeringPolicy size="10 MB" />
+                        </Policies>
+                        <DefaultRolloverStrategy max="10" />
+                </RollingRandomAccessFile>
+                <Console name="Console" target="SYSTEM_OUT">
+                        <!--
+                        <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n" />
+                        -->
+                        <PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss} %5p %c{1}\:%L - %m%n" />
+                </Console>
+        </Appenders>
+        <Loggers>
+                <Logger name="org.springframework.jdbc" level="info"
+                        additivity="false">
+                        <Appender-Ref ref="Console" />
+                </Logger>
+                <!-- 2015/12/04 -->
+                <Logger name="com.atomikos" level="warn"
+                        additivity="false">
+                        <Appender-Ref ref="Console" />
+                </Logger>
+                <Root level="info">
+                        <AppenderRef ref="RollingRandomAccessFile"/>
+                        <AppenderRef ref="Console" level="info" />
+                </Root>
+        </Loggers>
+</Configuration>
